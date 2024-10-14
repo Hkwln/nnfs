@@ -29,11 +29,11 @@ y_test = np_utils.to_categorical(y_test)
 
 # Network
 net = Network()
-net.add(FCLayer(28*28, 100))                # input_shape=(1, 28*28)    ;   output_shape=(1, 100)
+net.add(FcLayer(28*28, 100))                # input_shape=(1, 28*28)    ;   output_shape=(1, 100)
 net.add(ActivationLayer(tanh, tanh_prime))
-net.add(FCLayer(100, 50))                   # input_shape=(1, 100)      ;   output_shape=(1, 50)
+net.add(FcLayer(100, 50))                   # input_shape=(1, 100)      ;   output_shape=(1, 50)
 net.add(ActivationLayer(tanh, tanh_prime))
-net.add(FCLayer(50, 10))                    # input_shape=(1, 50)       ;   output_shape=(1, 10)
+net.add(FcLayer(50, 10))                    # input_shape=(1, 50)       ;   output_shape=(1, 10)
 net.add(ActivationLayer(tanh, tanh_prime))
 
 # train on 1000 samples
