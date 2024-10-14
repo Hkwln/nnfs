@@ -12,31 +12,28 @@ from  loss import mse, mse_prime
 from keras.utils import np_utils
 
  #load Mnist from server
-mnist_data =tfds.load("mnist")
-mnist_train, mnist_test = mnist_data["train"], mnist_data["test"]
+(mnist_train, mnist_test), mnist_data = tfds.load("mnist", split=['train', 'test'], as_supervised=True, shuffle_files=True, with_info=True,)
+ 
 assert isinstance(mnist_train, tf.data.Dataset)
-print(mnist_data, mnist_train, mnist_test)
+
 #normalizing img
 #train
 def normalize_img(image, label):
   """Normalizes images: `uint8` -> `float32`."""
   return tf.cast(image, tf.float32) / 255., label
 
-mnist_train = mnist_train.map(
-    normalize_img, num_parallel_calls=tf.data.AUTOTUNE)
+mnist_train = mnist_train.map(normalize_img, num_parallel_calls=tf.data.AUTOTUNE)
 mnist_train = mnist_train.cache()
-mnist_train_train = mnist_train.shuffle(mnist_data.splits['train'].num_examples)
-mnist_train_train = mnist_train.batch(128)
-mnist_train_train = mnist_train.prefetch(tf.data.AUTOTUNE)
+mnist_train = mnist_train.shuffle(mnist_data.splits["train"].num_examples)
+mnist_train = mnist_train.batch(128)
+mnist_train = mnist_train.prefetch(tf.data.AUTOTUNE)
   
 #test
-mnist_test =mnist_test.map(
-  normalize_img, num_parallel_calls=tf.data.AUTOTUNE
-)
+mnist_test =mnist_test.map(normalize_img, num_parallel_calls=tf.data.AUTOTUNE)
 mnist_test = mnist_test.batch(128)
 mnist_test = mnist_test.cache()
 mnist_test = mnist_test.prefetch(tf.data.AUTOTUNE)
-
+print(mnist_data, mnist_train, mnist_test)
 #(x_train, y_train),(x_test, y_test) = mnist.load_data() keras
 
 # training data : 60000 samples
