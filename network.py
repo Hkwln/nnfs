@@ -34,7 +34,7 @@ class Network:
                 #forward propagation
                 output = x_train[j]
                 for layer in self.layers:
-                    output =layer.forward_propagation(output)
+                    output = layer.forward_propagation(output)
                 #compute loss (only for displaying)
                 err += self.loss(y_train[j, output])
                 for layer in reversed(self.layers):

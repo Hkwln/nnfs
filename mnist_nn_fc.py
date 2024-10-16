@@ -2,6 +2,7 @@ import numpy as np
 import tensorflow_datasets as tfds
 import matplotlib.pyplot as plt
 import tensorflow as tf
+
 from network import Network
 from fully_connected_layer import FcLayer
 from activation import tanh, tanh_prime
@@ -10,9 +11,11 @@ from  loss import mse, mse_prime
 
 #from keras.dataset import mnist keras
 from keras.utils import np_utils
-
+#(x_train, y_train), (x_test, y_test),
  #load Mnist from server
-(mnist_train, mnist_test), mnist_data = tfds.load("mnist", split=['train', 'test'], as_supervised=True, shuffle_files=True, with_info=True,)
+(mnist_train, mnist_test), mnist_data = tfds.load("mnist", split=['train', 'test'],
+                                                   as_supervised=True, shuffle_files=True,
+                                                     with_info=True,)
  
 assert isinstance(mnist_train, tf.data.Dataset)
 
@@ -27,13 +30,21 @@ mnist_train = mnist_train.cache()
 mnist_train = mnist_train.shuffle(mnist_data.splits["train"].num_examples)
 mnist_train = mnist_train.batch(128)
 mnist_train = mnist_train.prefetch(tf.data.AUTOTUNE)
-  
+
 #test
-mnist_test =mnist_test.map(normalize_img, num_parallel_calls=tf.data.AUTOTUNE)
+mnist_test = mnist_test.map(normalize_img, num_parallel_calls=tf.data.AUTOTUNE)
 mnist_test = mnist_test.batch(128)
 mnist_test = mnist_test.cache()
 mnist_test = mnist_test.prefetch(tf.data.AUTOTUNE)
 print(mnist_data, mnist_train, mnist_test)
+X_numpy = np.random.random((1000, 32))
+Y_numpy = np.random.random((1000, 1))
+for image, label in mnist_train[]:
+  X_numpy = mnist_train[image]
+  Y_numpy = mnist_train[label]
+#X_train, X_test, y_train, y_test = (mnist_train, mnist_test)(X_numpy, Y_numpy, 
+#                                                    test_size=0.2, 
+#                                                    random_state=42)
 #(x_train, y_train),(x_test, y_test) = mnist.load_data() keras
 
 # training data : 60000 samples
@@ -62,8 +73,9 @@ net.add(ActivationLayer(tanh, tanh_prime))
 
 # train on 1000 samples
 # as we didn't implemented mini-batch GD, training will be pretty slow if we update at each iteration on 60000 samples...
+
 net.use(mse, mse_prime)
-net.fit(mnist_train, epochs=35, learning_rate=0.1)
+net.fit(X_numpy, Y_numpy , epochs=35, learning_rate=0.1)
 
 # test on 3 samples
 out = net.predict(mnist_test)
