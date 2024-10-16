@@ -36,11 +36,16 @@ mnist_test = mnist_test.batch(128)
 mnist_test = mnist_test.cache()
 mnist_test = mnist_test.prefetch(tf.data.AUTOTUNE)
 print(mnist_data, mnist_train, mnist_test)
-X_numpy = np.random.random((1000, 32))
-Y_numpy = np.random.random((1000, 1))
-for image, label in mnist_train[]:
-  X_numpy = mnist_train[image]
-  Y_numpy = mnist_train[label]
+#X_numpy = np.random.random((1000, 32))
+#Y_numpy = np.random.random((1000, 1))
+#hier kommt der image-label extract von den mnist training data (kopiert, muss noch getestet werden)
+def extract_image_label(data):
+    image, label = mnist_train
+    return image, label
+
+mnist_train = tf.data.Dataset.from_tensor_slices((images, labels))
+image_label_dataset = mnist_train.map(extract_image_label)
+image_dataset, label_dataset = tf.data.Dataset.unbatch(image_label_dataset)
 #X_train, X_test, y_train, y_test = (mnist_train, mnist_test)(X_numpy, Y_numpy, 
 #                                                    test_size=0.2, 
 #                                                    random_state=42)
