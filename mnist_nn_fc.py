@@ -39,17 +39,16 @@ print(mnist_data, mnist_train, mnist_test)
 #X_numpy = np.random.random((1000, 32))
 #Y_numpy = np.random.random((1000, 1))
 #hier kommt der image-label extract von den mnist training data (kopiert, muss noch getestet werden)
-def extract_image_label(data):
-    image, label = mnist_train
-    return image, label
 
-mnist_train = tf.data.Dataset.from_tensor_slices((images, labels))
-image_label_dataset = mnist_train.map(extract_image_label)
-image_dataset, label_dataset = tf.data.Dataset.unbatch(image_label_dataset)
-#X_train, X_test, y_train, y_test = (mnist_train, mnist_test)(X_numpy, Y_numpy, 
-#                                                    test_size=0.2, 
-#                                                    random_state=42)
-#(x_train, y_train),(x_test, y_test) = mnist.load_data() keras
+## Extract the images and labels
+x_train, y_train = [], []
+for image, label in tfds.as_numpy(mnist_train):
+    x_train.append(image)
+    y_train.append(label)
+
+# Convert lists to numpy arrays
+x_train = np.array(x_train)
+y_train = np.array(y_train)
 
 # training data : 60000 samples
 # reshape and normalize input data
@@ -79,7 +78,7 @@ net.add(ActivationLayer(tanh, tanh_prime))
 # as we didn't implemented mini-batch GD, training will be pretty slow if we update at each iteration on 60000 samples...
 
 net.use(mse, mse_prime)
-net.fit(X_numpy, Y_numpy , epochs=35, learning_rate=0.1)
+net.fit(x_train, y_train , epochs=35, learning_rate=0.1)
 
 # test on 3 samples
 out = net.predict(mnist_test)
