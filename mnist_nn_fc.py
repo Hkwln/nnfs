@@ -50,6 +50,9 @@ for image, label in tfds.as_numpy(mnist_train):
 x_train = np.array(x_train)
 y_train = np.array(y_train)
 
+x_train = x_train / 255.0
+
+
 # training data : 60000 samples
 # reshape and normalize input data
 #x_train = x_train.reshape(x_train.shape[0], 1, 28*28)
@@ -67,7 +70,7 @@ y_train = np.array(y_train)
 
 # Network
 net = Network()
-net.add(FcLayer(28*28, 100))                # input_shape=(1, 28*28)    ;   output_shape=(1, 100)
+net.add(FcLayer(784, 100))                # input_shape=(1, 28*28)    ;   output_shape=(1, 100)
 net.add(ActivationLayer(tanh, tanh_prime))
 net.add(FcLayer(100, 50))                   # input_shape=(1, 100)      ;   output_shape=(1, 50)
 net.add(ActivationLayer(tanh, tanh_prime))
