@@ -2,10 +2,11 @@
 neural network from scratch, at least I tried
 using tensorflow dataset
  latest error:
-shapes (128,28,28,1) and (784,100) not aligned: 1 (dim 3) != 784 (dim 0)
-  File "*/GitHub/nnfs/fully_connected_layer.py", line 14, in forward_propagation
-    self.output = np.dot(self.input, self.weights) + self.bias
-  File "*/GitHub/nnfs/network.py", line 37, in fit
-    output = layer.forward_propagation(output)
-  File "*/GitHub/nnfs/mnist_nn_fc.py", line 81, in <module>
-    net.fit(x_train, y_train , epochs=35, learning_rate=0.1)
+Only integers, slices (`:`), ellipsis (`...`), tf.newaxis (`None`) and scalar tf.int32/tf.int64 tensors are valid indices, got array([[-0.99879159,  0.61818112,  0.91265485, -0.88631204, -0.42409893,
+         0.08888091, -0.19478377, -0.02089696, -0.91586014, -0.96646877]])
+  File "C:\Users\spaul\neural network from scratch\nnfs\network.py", line 45, in fit
+    err += self.loss(y_train[j, output])
+  File "C:\Users\spaul\neural network from scratch\nnfs\mnist_nn_fc.py", line 77, in <module>
+    net.fit(images, labels , epochs=35, learning_rate=0.1)
+TypeError: Only integers, slices (`:`), ellipsis (`...`), tf.newaxis (`None`) and scalar tf.int32/tf.int64 tensors are valid indices, got array([[-0.99879159,  0.61818112,  0.91265485, -0.88631204, -0.42409893,
+         0.08888091, -0.19478377, -0.02089696, -0.91586014, -0.96646877]])

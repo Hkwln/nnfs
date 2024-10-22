@@ -23,6 +23,12 @@ class Network:
                 output = layer.forward_propagation(output)
             result.append(output)
         return result
+    def get_weights(self):
+        weights = []
+        for layer in self.layers:
+            if isinstance(layer, FcLayer):
+                weights.append(layer.weights)
+        return weights
     #train the network
     def fit(self,x_train, y_train, epochs, learning_rate):
         #sample dimenstion first
@@ -36,8 +42,10 @@ class Network:
                 for layer in self.layers:
                     output = layer.forward_propagation(output)
                 #compute loss (only for displaying)
-                err += self.loss(y_train[j, output])
+                #err += self.loss(y_train[j, output])
                 for layer in reversed(self.layers):
+                    # folgende Zeile ist neu
+                    error = self.loss_prime(y_train[j], output)
                     error = layer.backward_propagation(error, learning_rate)
             #calculate average error on all samples
             err /= sample

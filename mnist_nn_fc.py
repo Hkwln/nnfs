@@ -18,7 +18,7 @@ assert isinstance(mnist_train, tf.data.Dataset)
 
 #normalizing img
 #train
-def normalize_img(image, label):
+def normalize_img(image, label): 
   """Normalizes images: `uint8` -> `float32`."""
   return tf.cast(image, tf.float32) / 255., label
 
@@ -36,35 +36,45 @@ print(mnist_data, mnist_train, mnist_test)
 
 #hier kommt der image-label extract von den mnist training data (kopiert, muss noch getestet werden)
 
-## Extract the images and labels
-x_train, y_train = [], []
-for image, label in tfds.as_numpy(mnist_train):
-    x_train.append(image)
-    y_train.append(label)
+## Extract the images and labels 
+#x_train, y_train = [], []
+#for image, label in tfds.as_numpy(mnist_train):
+#    x_train.append(image)
+#    y_train.append(label)
 
 # Convert lists to numpy arrays
-x_train = np.array(x_train)
-y_train = np.array(y_train)
+#x_train = np.array(x_train)
+#y_train = np.array(y_train)
 
-x_train = x_train / 255.0
+#x_train = x_train / 255.0
+
+
 
 # Network
 net = Network()
-net.add(FcLayer(784, 100))                # input_shape=(1, 28*28)    ;   output_shape=(1, 100)
+net.add(FcLayer(784, 128))                # input_shape=(1, 28*28)    ;   output_shape=(1, 100) copilot says 128
 net.add(ActivationLayer(tanh, tanh_prime))
-net.add(FcLayer(100, 50))                   # input_shape=(1, 100)      ;   output_shape=(1, 50)
+net.add(FcLayer(128, 64))                   # input_shape=(1, 100)      ;   output_shape=(1, 50) copilot says 64
+
 net.add(ActivationLayer(tanh, tanh_prime))
-net.add(FcLayer(50, 10))                    # input_shape=(1, 50)       ;   output_shape=(1, 10)
+net.add(FcLayer(64, 10))                    # input_shape=(1, 50)       ;   output_shape=(1, 10)
 net.add(ActivationLayer(tanh, tanh_prime))
+
 
 # train on 1000 samples
 # as we didn't implemented mini-batch GD, training will be pretty slow if we update at each iteration on 60000 samples...
 
-net.use(mse, mse_prime)
-net.fit(x_train, y_train , epochs=35, learning_rate=0.1)
+
 
 # test on 3 samples
-out = net.predict(mnist_test)
+
+#trying out copilots suggestion
+for images, labels in mnist_train.take(1):
+    images = tf.reshape(images, (images.shape[0], -1)) #flatten the images
+    out = net.predict(images)
+    
+net.use(mse, mse_prime)
+net.fit(images, labels , epochs=35, learning_rate=0.1)
 print("\n")
 print("predicted values : ")
 print(out, end="\n")
