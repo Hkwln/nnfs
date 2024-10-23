@@ -50,12 +50,12 @@ net.add(ActivationLayer(tanh, tanh_prime))
 #trying out copilots suggestion
 for images, labels in mnist_train.take(1):
     images = tf.reshape(images, (images.shape[0], -1)) #flatten the images
-    
+    out = net.predict(images)
 net.use(mse, mse_prime)
 net.fit(images, labels , epochs=35, learning_rate=0.1)
 
-# test on 3 samples
-out = net.predict(images[:3])
+# test on 3 samples 
+#out = net.predict(images[:3])
 print("\n")
 print("predicted values : ")
 print(out, end="\n")
