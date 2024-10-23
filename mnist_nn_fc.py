@@ -32,7 +32,7 @@ mnist_test = mnist_test.map(normalize_img, num_parallel_calls=tf.data.AUTOTUNE)
 mnist_test = mnist_test.batch(128)
 mnist_test = mnist_test.cache()
 mnist_test = mnist_test.prefetch(tf.data.AUTOTUNE)
-print(mnist_data, mnist_train, mnist_test)
+#print(mnist_data, mnist_train, mnist_test)
 
 #hier kommt der image-label extract von den mnist training data (kopiert, muss noch getestet werden)
 
