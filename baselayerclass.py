@@ -1,4 +1,4 @@
-#Baser Layer
+#Base Layer
 
 class Layer:
     def __init__(self) -> None:

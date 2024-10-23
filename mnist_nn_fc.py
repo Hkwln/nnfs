@@ -65,18 +65,17 @@ net.add(ActivationLayer(tanh, tanh_prime))
 # as we didn't implemented mini-batch GD, training will be pretty slow if we update at each iteration on 60000 samples...
 
 
-
-# test on 3 samples
-
 #trying out copilots suggestion
 for images, labels in mnist_train.take(1):
     images = tf.reshape(images, (images.shape[0], -1)) #flatten the images
-    out = net.predict(images)
+    #out = net.predict(images)
     
 net.use(mse, mse_prime)
 net.fit(images, labels , epochs=35, learning_rate=0.1)
+
+# test on 3 samples
+out = net.predict(images[:3])
 print("\n")
 print("predicted values : ")
 print(out, end="\n")
 print("true values : ")
-print(mnist_test)

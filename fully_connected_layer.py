@@ -12,12 +12,15 @@ class FcLayer(Layer):
        
     #returns outpot for a given input
     def forward_propagation(self, input_data):
+        #ensure input_data is 2D
+        if input_data.ndim == 1:
+            input_data = input_data.reshape(1, -1)
         self.input = input_data
         self.output = np.dot(self.input, self.weights) + self.bias
         return self.output
     #computes dE/dW, dE/dB for a fiven output_error = dE/dY. REturns input_errors=dE/dX.
     def backward_propagation(self,output_error, learning_rate):
-        input_error = np.dot(self,output_error, self.weights.T)
+        input_error = np.dot(output_error, self.weights.T)
         weights_error = np.dot(self.input.T, output_error)
         #dBias = output_error
 
