@@ -37,7 +37,7 @@ mnist_test = mnist_test.prefetch(tf.data.AUTOTUNE)
 # Network
 net = Network()
 net.add(FcLayer(784, 128))                # input_shape=(1, 28*28)    ;   output_shape=(1, 100) copilot says 128
-net.add(ActivationLayer(tanh, tanh_prime))
+net.add(ActivationLayer(tanh, tanh_prime)) # or relu and relu_prime
 net.add(FcLayer(128, 64))                   # input_shape=(1, 100)      ;   output_shape=(1, 50) copilot says 64
 
 net.add(ActivationLayer(tanh, tanh_prime))
@@ -50,9 +50,13 @@ net.add(ActivationLayer(tanh, tanh_prime))
 #trying out copilots suggestion
 for images, labels in mnist_train.take(1):
     images = tf.reshape(images, (images.shape[0], -1)) #flatten the images
+    labels = tf.one_hot(labels, depth =10) #one hot encoding the labels
+    images, labels = images.numpy(), labels.numpy()
     out = net.predict(images)
 net.use(mse, mse_prime)
-net.fit(images, labels , epochs=35, learning_rate=0.1)
+net.fit(images, labels , epochs=50, learning_rate=0.001)
+#net.loss = net.evaluate(images, labels)
+
 
 # test on 3 samples 
 #out = net.predict(images[:3])
@@ -63,7 +67,7 @@ print("true values : ")
 print(labels[:3], end="\n")
 
 #trying to visualize training process doesn't work yet
-#loss_history = self.loss
+#loss_history = net.loss
 #plt.plot(loss_history)
 #plt.xlabel('Epochs')
 #plt.ylabel('Loss')
