@@ -34,14 +34,14 @@ mnist_test = mnist_test.cache()
 mnist_test = mnist_test.prefetch(tf.data.AUTOTUNE)
 #print(mnist_data, mnist_train, mnist_test)
 
-# Network
+# Network, diese tolle graphik, die man überall sieht mit den layern und neuronen und so
 net = Network()
-net.add(FcLayer(784, 128))                # input_shape=(1, 28*28)    ;   output_shape=(1, 100) copilot says 128
+net.add(FcLayer(784, 128))                # input_shape=(1, 28*28)    ;   output_shape=(1, 100) layer 1
 net.add(ActivationLayer(tanh, tanh_prime)) # or relu and relu_prime
-net.add(FcLayer(128, 64))                   # input_shape=(1, 100)      ;   output_shape=(1, 50) copilot says 64
+net.add(FcLayer(128, 64))                   # input_shape=(1, 100)      ;   output_shape=(1, 50) layer 2
 
-net.add(ActivationLayer(tanh, tanh_prime))
-net.add(FcLayer(64, 10))                    # input_shape=(1, 50)       ;   output_shape=(1, 10)
+net.add(ActivationLayer(tanh, tanh_prime))   
+net.add(FcLayer(64, 10))                    # input_shape=(1, 50)       ;   output_shape=(1, 10) layer 3
 net.add(ActivationLayer(tanh, tanh_prime))
 
 # train on 1000 samples
@@ -54,15 +54,15 @@ for images, labels in mnist_train.take(1):
     images, labels = images.numpy(), labels.numpy()
     out = net.predict(images)
 net.use(mse, mse_prime)
-net.fit(images, labels , epochs=50, learning_rate=0.001)
+net.fit(images, labels , epochs=50, learning_rate=0.01)
 #net.loss = net.evaluate(images, labels)
 
 
 # test on 3 samples 
 #out = net.predict(images[:3])
 print("\n")
-print("predicted values : ")
-print(out, end="\n")
+#print("predicted values : ")
+#print(out, end="\n")
 print("true values : ")
 print(labels[:3], end="\n")
 

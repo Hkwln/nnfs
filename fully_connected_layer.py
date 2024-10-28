@@ -5,10 +5,13 @@ import numpy as np
 class FcLayer(Layer):
     #input_size = number of input neurons
     #output_size = number of output neurons=
-    def __init__(self, input_size, output_size) -> None:
+    def __init__(self, input_size, output_size, beta1=0.9, beta2 = 0.999, epsilon = 1e-8) -> None:
         super().__init__()
-        self.weights = np.random.rand(input_size,output_size) -0.5
+        self.weights = np.random.randn(input_size,output_size) * 0.1
         self.bias = np.random.rand(1,output_size) -0.5
+        self.beta1 = beta1
+        self.beta2 = beta2
+        self.epsilon = epsilon
        
     #returns outpot for a given input
     def forward_propagation(self, input_data):
