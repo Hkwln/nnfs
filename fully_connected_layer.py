@@ -6,7 +6,7 @@ class FcLayer(Layer):
     #input_size = number of input neurons
     #output_size = number of output neurons=
     def __init__(self, input_size, output_size, beta1=0.9, beta2 = 0.999, epsilon = 1e-8) -> None:
-        super().__init__(self)
+        super().__init__()
         
         self.weights = np.random.randn(input_size,output_size) * 0.1
         self.bias = [np.random.randn(1,output_size)]
@@ -55,15 +55,15 @@ class FcLayer(Layer):
     #now we need to reuturn the tuple nabla_b, nabla w
     #they are representing the gradient for the cost function C_x 
     #nabla_b and nabla_w are layer-by-layer lists of numpy arrays, similar to self.bias and self.weights
-    def backward_propagation(self,output_error, learning_rate):
+    def backward_propagation(self,output_size, learning_rate):
         nabla_b = [np.zeros(b.shape) for b in self.bias]
         nabla_W = [np.zeros(w.shape) for w in self.weights]
         #feedforward
-        activation = self.input
-        activation = [self.input] #list to store all the activations, layer by layer
+        activation = output_size
+        activation = [output_size] #list to store all the activations, layer by layer
         zs = [ ] #list to store all the z vectors, layer by layer
         for b, w in zip(self.bias, self.weights):
-            z = np.dot(activation[-1], w) + b
+            z = np.dot(w, activation[-2]) + b
             zs.append(z)
             activation.append(self.sigmoid(z))
         #backward pass
