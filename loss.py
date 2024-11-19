@@ -1,12 +1,18 @@
 import numpy as np
-#folgendes hat der debugger vorgeschlagen
-#following import is needed to use numpy functions in tensorflow
 from tensorflow.python.ops.numpy_ops import np_config
 np_config.enable_numpy_behavior()
 
-#loss function and its derivative
+# loss function and its derivative
 def mse(y_true, y_pred):
-    return np.mean(np.power(y_true-y_pred, 2))
+    if y_true.ndim == 1:
+        y_true = y_true.reshape(-1, 1)
+    if y_pred.ndim == 1:
+        y_pred = y_pred.reshape(-1, 1)
+    return np.mean(np.power(y_true - y_pred, 2))
 
 def mse_prime(y_true, y_pred):
-    return 2*(y_pred-y_true)/y_true.size
+    if y_true.ndim == 1:
+        y_true = y_true.reshape(-1, 1)
+    if y_pred.ndim == 1:
+        y_pred = y_pred.reshape(-1, 1)
+    return 2 * (y_pred - y_true) / y_true.size

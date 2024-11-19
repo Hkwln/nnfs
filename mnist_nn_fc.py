@@ -1,3 +1,7 @@
+#set environment variable
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+
 import numpy as np
 import tensorflow_datasets as tfds
 import matplotlib.pyplot as plt
@@ -45,18 +49,13 @@ net.add(FcLayer(64, 10))                    # input_shape=(1, 50)       ;   outp
 net.add(ActivationLayer(tanh, tanh_prime))
 
 # train on 1000 samples
-# as we didn't implemented mini-batch GD, training will be pretty slow if we update at each iteration on 60000 samples...
-
-#trying out copilots suggestion
 for images, labels in mnist_train.take(1):
-    images = tf.reshape(images, (images.shape[0], -1)) #flatten the images
-    labels = tf.one_hot(labels, depth =10) #one hot encoding the labels
+    images = tf.reshape(images, (images.shape[0], -1)) # flatten the images
+    labels = tf.one_hot(labels, depth=10) # one hot encoding the labels
     images, labels = images.numpy(), labels.numpy()
     out = net.predict(images)
 net.use(mse, mse_prime)
-net.fit(images, labels , epochs=50, learning_rate=0.01)
-#net.loss = net.evaluate(images, labels)
-
+net.fit(images, labels, epochs=50, learning_rate=0.01)
 
 # test on 3 samples 
 #out = net.predict(images[:3])

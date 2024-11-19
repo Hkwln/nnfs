@@ -17,6 +17,8 @@ class FcLayer(Layer):
     #returns outpot for a given input
     def forward_propagation(self, input_data):
         self.input = input_data
+        if self.input.ndim == 1:
+            self.input = self.input.reshape(-1, 1)
         self.output = np.dot(self.weights, self.input) + self.bias
         return self.output
     #now i am trying to train the network using a mini-batch stochastic gradient descent
@@ -53,53 +55,25 @@ class FcLayer(Layer):
     #they are representing the gradient for the cost function C_x 
     #nabla_b and nabla_w are layer-by-layer lists of numpy arrays, similar to self.bias and self.weights
     def backward_propagation(self, output_error, learning_rate):
-        nabla_b = [np.zeros(b.shape) for b in self.bias]
-        nabla_W = [np.zeros(w.shape) for w in self.weights]
+        if output_error.ndim == 1:
+            output_error = output_error.reshape(-1, 1)
+        input_error = np.dot(self.weights.T, output_error)
+        weights_error = np.dot(output_error, self.input.T)
         
-        # Initialize the activation list with the output_size
-        activation = [output_error]  # list to store all the activations, layer by layer
-        zs = []  # list to store all the z vectors, layer by layer
+        # Update parameters
+        self.weights -= learning_rate * weights_error
+        self.bias -= learning_rate * np.sum(output_error, axis=1, keepdims=True)
         
-        # Ensure that the activation list has at least one element before starting the loop
-        if len(activation) < 1:
-            raise IndexError("Activation list is empty, cannot proceed with backward propagation")
-        
-        # Feedforward
-        current_activation = output_error
-        for b, w in zip(self.bias, self.weights):
-            z = np.dot(w[+2], current_activation) + b
-            zs.append(z)
-            current_activation = self.sigmoid(z)
-            activation.append(current_activation)
-        
-        # Now the activation list should have enough elements
-        if len(activation) < 2:
-            raise IndexError("Not enough activations to access activation[-2]")
-        
-        # Backpropagation
-        delta = output_error * self.sigmoid_prime(zs[-1])
-        delta = delta.reshape(-1,1) #ensure delta is (output_size, 1)
-        activation[-1] = activation[-1].reshape(-1,1) #ensure activation is (output_size, 1)
-        nabla_b[-1] = delta
-        nabla_W[-1] = np.dot(delta, activation[-2])
-        
-        for l in range(2, self.num_layers):
-            z = zs[-l]
-            sp = self.sigmoid_prime(z)
-            delta = np.dot(self.weights[-l+1].transpose(), delta) * sp
-            nabla_b[-l] = delta
-            nabla_W[-l] = np.dot(delta, activation[-l-1].transpose())
-        
-        return nabla_b, nabla_W
+        return input_error
 
     #old code
-        #input_error = np.dot(output_error, self.weights.T)
-        #weights_error = np.dot(self.input.T, output_error)
-        #dBias = output_error
-        #update paramaters
-        #self.weights -= learning_rate * weights_error
-        #self.bias -= learning_rate * output_error
-        #return input_error
+    # def backward_propagation(self, output_error, learning_rate):
+    #     input_error = np.dot(output_error, self.weights.T)
+    #     weights_error = np.dot(self.input.T, output_error)
+    #     self.weights -= learning_rate * weights_error
+    #     self.bias -= learning_rate * output_error
+    #     return input_error
+
     def evaluate(self, test_data):
         test_results = [(np.argmax(self.forward_propagation(x)), y) for (x, y) in test_data]
         return sum(int(x == y) for (x, y) in test_results)
