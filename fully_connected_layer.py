@@ -8,19 +8,16 @@ class FcLayer(Layer):
     def __init__(self, input_size, output_size, beta1=0.9, beta2 = 0.999, epsilon = 1e-8) -> None:
         super().__init__()
         
-        self.weights = np.random.randn(input_size,output_size) * 0.1
-        self.bias = [np.random.randn(1,output_size)]
+        self.weights = np.random.randn(output_size, input_size)
+        self.bias = np.random.randn(output_size, 1)
         #self.beta1 = beta1
         #self.beta2 = beta2
         #self.epsilon = epsilon
        
     #returns outpot for a given input
     def forward_propagation(self, input_data):
-        #ensure input_data is 2D
-        if input_data.ndim == 1:
-            input_data = input_data.reshape(1, -1)
         self.input = input_data
-        self.output = np.dot(self.input, self.weights) + self.bias
+        self.output = np.dot(self.weights, self.input) + self.bias
         return self.output
     #now i am trying to train the network using a mini-batch stochastic gradient descent
     #The training data is a list of tubles with(image, label)
@@ -55,29 +52,46 @@ class FcLayer(Layer):
     #now we need to reuturn the tuple nabla_b, nabla w
     #they are representing the gradient for the cost function C_x 
     #nabla_b and nabla_w are layer-by-layer lists of numpy arrays, similar to self.bias and self.weights
-    def backward_propagation(self,output_size, learning_rate):
+    def backward_propagation(self, output_error, learning_rate):
         nabla_b = [np.zeros(b.shape) for b in self.bias]
         nabla_W = [np.zeros(w.shape) for w in self.weights]
-        #feedforward
-        activation = output_size
-        activation = [output_size] #list to store all the activations, layer by layer
-        zs = [ ] #list to store all the z vectors, layer by layer
+        
+        # Initialize the activation list with the output_size
+        activation = [output_error]  # list to store all the activations, layer by layer
+        zs = []  # list to store all the z vectors, layer by layer
+        
+        # Ensure that the activation list has at least one element before starting the loop
+        if len(activation) < 1:
+            raise IndexError("Activation list is empty, cannot proceed with backward propagation")
+        
+        # Feedforward
+        current_activation = output_error
         for b, w in zip(self.bias, self.weights):
-            z = np.dot(w, activation[-2]) + b
+            z = np.dot(w[+2], current_activation) + b
             zs.append(z)
-            activation.append(self.sigmoid(z))
-        #backward pass
-        delta = self.cost_derivative(activation[-1], output_error) * self.sigmoid_prime(zs[-1])
+            current_activation = self.sigmoid(z)
+            activation.append(current_activation)
+        
+        # Now the activation list should have enough elements
+        if len(activation) < 2:
+            raise IndexError("Not enough activations to access activation[-2]")
+        
+        # Backpropagation
+        delta = output_error * self.sigmoid_prime(zs[-1])
+        delta = delta.reshape(-1,1) #ensure delta is (output_size, 1)
+        activation[-1] = activation[-1].reshape(-1,1) #ensure activation is (output_size, 1)
         nabla_b[-1] = delta
-        nabla_W[-1] = np.dot(activation[-2].T, delta)
-        #Note that the variable l in the loop below is used a little differently to the notation in this chapter. Here, l = 1 means the last layer of neurons, l = 2 is the second-last layer, and so on. It's a renumbering of the scheme in the book, used here to take advantage of the fact that Python can use negative indices in lists.
+        nabla_W[-1] = np.dot(delta, activation[-2])
+        
         for l in range(2, self.num_layers):
             z = zs[-l]
             sp = self.sigmoid_prime(z)
-            delta = np.dot(self.weights[-l+1].T, delta) * sp
+            delta = np.dot(self.weights[-l+1].transpose(), delta) * sp
             nabla_b[-l] = delta
-            nabla_W[-l] = np.dot(activation[-l-1].T, delta)
-        return (nabla_b, nabla_W)
+            nabla_W[-l] = np.dot(delta, activation[-l-1].transpose())
+        
+        return nabla_b, nabla_W
+
     #old code
         #input_error = np.dot(output_error, self.weights.T)
         #weights_error = np.dot(self.input.T, output_error)
@@ -99,3 +113,4 @@ class FcLayer(Layer):
         return 1.0/(1.0+np.exp(-z))
     def sigmoid_prime(self, z):
         return self.sigmoid(z)*(1-self.sigmoid(z))
+

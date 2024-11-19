@@ -31,24 +31,24 @@ class Network:
                 weights.append(layer.weights)
         return weights
     #train the network 
-    def fit(self,x_train, y_train, epochs, learning_rate):
-        #training loop
+    def fit(self, x_train, y_train, epochs, learning_rate):
+        # training loop
         for i in range(epochs):
             err = 0
             for j in range(len(x_train)):
-                #forward propagation
+                # forward propagation
                 output = x_train[j]
                 for layer in self.layers:
                     output = layer.forward_propagation(output)
                 
-                #compute loss (only for displaying)
+                # compute loss (only for displaying)
                 err += self.loss(y_train[j], output)
-                #Backward propagation
+                
+                # backward propagation
                 error = self.loss_prime(y_train[j], output)
                 for layer in reversed(self.layers):
-                    
                     error = layer.backward_propagation(error, learning_rate)
 
-            #calculate average error on all samples
+            # calculate average error on all samples
             err /= len(x_train)
-            print('epoch %d/%d error =%f' % (i+1, epochs, err))
+            print('epoch %d/%d error = %f' % (i+1, epochs, err))

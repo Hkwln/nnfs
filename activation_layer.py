@@ -15,4 +15,6 @@ class ActivationLayer(Layer):
     # Returns input_error=dE/dX for a given output_error=dE/dY.
     # learning_rate is not used because there is no "learnable" parameters.
     def backward_propagation(self, output_error, learning_rate):
-        return self.activation_prime(self.input) * output_error
+        # Compute the input error for the current layer
+        input_error = self.activation_prime(self.input) * output_error
+        return input_error
