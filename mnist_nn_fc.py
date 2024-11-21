@@ -50,6 +50,7 @@ net.add(FcLayer(64, 10))                    # input_shape=(1, 50)       ;   outp
 net.add(ActivationLayer(tanh, tanh_prime))
 
 # train on 1000 samples
+
 for images, labels in mnist_train.take(1):
     images = tf.reshape(images, (images.shape[0], -1)) # flatten the images
     labels = tf.one_hot(labels, depth=10) # one hot encoding the labels
@@ -65,11 +66,3 @@ print("\n")
 #print(out, end="\n")
 print("true values : ")
 print(labels[:3], end="\n")
-
-#trying to visualize training process doesn't work yet
-#loss_history = net.loss
-#plt.plot(loss_history)
-#plt.xlabel('Epochs')
-#plt.ylabel('Loss')
-#plt.title('Training Loss over Epochs')
-#plt.show()

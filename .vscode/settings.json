@@ -1,0 +1,6 @@
+{
+    "code-runner.executorMap": {
+        "python": "python -u"
+    },
+    "python.pythonPath": "/Users/spaul/anaconda3/envs/mlenv/python.exe"
+}

@@ -1,3 +1,4 @@
+import numpy as np
 from fully_connected_layer import FcLayer
 class Network:
     def __init__(self) -> None:
@@ -35,6 +36,9 @@ class Network:
         # training loop
         for i in range(epochs):
             err = 0
+            correct_predictions = 0
+            train_losses = []
+            train_accuracies = []
             for j in range(len(x_train)):
                 # forward propagation
                 output = x_train[j]
@@ -44,11 +48,19 @@ class Network:
                 # compute loss (only for displaying)
                 err += self.loss(y_train[j], output)
                 
+                # compute accuracy
+                if np.argmax(output) == np.argmax(y_train[j]):
+                    correct_predictions += 1
                 # backward propagation
                 error = self.loss_prime(y_train[j], output)
                 for layer in reversed(self.layers):
                     error = layer.backward_propagation(error, learning_rate)
-
-            # calculate average error on all samples
+            
+            # calculate average error and accuracy on all samples
             err /= len(x_train)
+            accuracy = correct_predictions / len(x_train)
+            train_losses.append(err)
+            train_accuracies.append(accuracy)
+    
+            print(f'Epoch {epochs+1}/{epochs}, Loss: {err}, Accuracy: {accuracy}')
             print('epoch %d/%d error = %f' % (i+1, epochs, err))
