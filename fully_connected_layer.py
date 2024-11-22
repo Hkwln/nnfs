@@ -64,7 +64,7 @@ class FcLayer(Layer):
         self.weights -= learning_rate * weights_error
         self.bias -= learning_rate * np.sum(output_error, axis=1, keepdims=True)
         
-        return input_error  # Explicitly convert to NumPy array
+        return input_error 
 
     #old code
     # def backward_propagation(self, output_error, learning_rate):
