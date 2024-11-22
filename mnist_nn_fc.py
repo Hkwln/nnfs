@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 from network import Network
 from fully_connected_layer import FcLayer
-from activation import tanh, tanh_prime
+from activation import tanh, tanh_prime, relu, relu_prime
 from activation_layer import ActivationLayer
 from  loss import mse, mse_prime
 
@@ -52,7 +52,7 @@ x_test, y_test = prepare_data(mnist_test)
 # Network, diese tolle graphik, die man überall sieht mit den layern und neuronen und so
 net = Network()
 net.add(FcLayer(784, 128))                # input_shape=(1, 28*28)    ;   output_shape=(1, 100) layer 1
-net.add(ActivationLayer(tanh, tanh_prime)) # or relu and relu_prime
+net.add(ActivationLayer(tanh, tanh_prime)) # tanh or tanh_prime relu and relu_prime 
 net.add(FcLayer(128, 64))                   # input_shape=(1, 100)      ;   output_shape=(1, 50) layer 2
 
 net.add(ActivationLayer(tanh, tanh_prime))   
@@ -60,7 +60,7 @@ net.add(FcLayer(64, 10))                    # input_shape=(1, 50)       ;   outp
 net.add(ActivationLayer(tanh, tanh_prime))
 
 net.use(mse, mse_prime)
-net.fit(x_train, y_train, epochs=10, learning_rate=0.001)
+net.fit(x_train, y_train, epochs=10, learning_rate=0.01)
 
 # evaluate the network on the test set
 predictions = net.predict(x_test)
