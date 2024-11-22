@@ -22,9 +22,11 @@ class Network:
         for i in range (samples):
             #forward propagation
             output = input_data[i]
+            if output.ndim == 1:
+                output = output.reshape(-1, 1)
             for layer in self.layers:
                 output = layer.forward_propagation(output)
-            result.append(output)
+            result.append(output.get())  # Explicitly convert to NumPy array
         return result
     def get_weights(self):
         weights = []
@@ -43,6 +45,8 @@ class Network:
             for j in range(len(x_train)):
                 # forward propagation
                 output = x_train[j]
+                if output.ndim == 1:
+                    output = output.reshape(-1, 1)
                 for layer in self.layers:
                     output = layer.forward_propagation(output)
                 
@@ -50,7 +54,7 @@ class Network:
                 err += self.loss(y_train[j], output)
                 
                 # compute accuracy
-                if np.argmax(output) == np.argmax(y_train[j]):
+                if np.argmax(output.get()) == np.argmax(y_train[j].get()):  # Explicitly convert to NumPy array
                     correct_predictions += 1
                 # backward propagation
                 error = self.loss_prime(y_train[j], output)
@@ -66,4 +70,3 @@ class Network:
             
             print('epoch %d/%d' % (i+1, epochs))
             print(f'Loss: {err}, Accuracy: {accuracy}')
-    

@@ -1,8 +1,6 @@
 import numpy as np
-from tensorflow.python.ops.numpy_ops import np_config
-np_config.enable_numpy_behavior()
 
-# loss function and its derivative
+# Loss function and its derivative
 def mse(y_true, y_pred):
     if y_true.ndim == 1:
         y_true = y_true.reshape(-1, 1)
