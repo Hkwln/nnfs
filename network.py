@@ -1,4 +1,5 @@
 import numpy as np
+import json
 from fully_connected_layer import FcLayer
 class Network:
     def __init__(self) -> None:
@@ -62,5 +63,7 @@ class Network:
             train_losses.append(err)
             train_accuracies.append(accuracy)
     
-            print(f'Epoch {epochs+1}/{epochs}, Loss: {err}, Accuracy: {accuracy}')
-            print('epoch %d/%d error = %f' % (i+1, epochs, err))
+            
+            print('epoch %d/%d' % (i+1, epochs))
+            print(f'Loss: {err}, Accuracy: {accuracy}')
+    
