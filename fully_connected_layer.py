@@ -20,7 +20,7 @@ class FcLayer(Layer):
         if self.input.ndim == 1:
             self.input = self.input.reshape(-1, 1)
         self.output = np.dot(self.weights, self.input) + self.bias
-        return self.output.get()  # Explicitly convert to NumPy array
+        return self.output  # Explicitly convert to NumPy array
     #now i am trying to train the network using a mini-batch stochastic gradient descent
     #The training data is a list of tubles with(image, label)
     
@@ -64,7 +64,7 @@ class FcLayer(Layer):
         self.weights -= learning_rate * weights_error
         self.bias -= learning_rate * np.sum(output_error, axis=1, keepdims=True)
         
-        return input_error.get()  # Explicitly convert to NumPy array
+        return input_error  # Explicitly convert to NumPy array
 
     #old code
     # def backward_propagation(self, output_error, learning_rate):

@@ -26,7 +26,7 @@ class Network:
                 output = output.reshape(-1, 1)
             for layer in self.layers:
                 output = layer.forward_propagation(output)
-            result.append(output.get())  # Explicitly convert to NumPy array
+            result.append(output)  # Explicitly convert to NumPy array
         return result
     def get_weights(self):
         weights = []
@@ -54,7 +54,7 @@ class Network:
                 err += self.loss(y_train[j], output)
                 
                 # compute accuracy
-                if np.argmax(output.get()) == np.argmax(y_train[j].get()):  # Explicitly convert to NumPy array
+                if np.argmax(output) == np.argmax(y_train[j]):  # Explicitly convert to NumPy array
                     correct_predictions += 1
                 # backward propagation
                 error = self.loss_prime(y_train[j], output)

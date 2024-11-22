@@ -2,7 +2,7 @@
 
 import os
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
-import cupy as cp
+
 import numpy as np
 import tensorflow_datasets as tfds
 import matplotlib.pyplot as plt
@@ -33,7 +33,7 @@ def prepare_data(dataset):
     image = image.reshape(-1)  # Reshape to (28, 28, 1)
     images.append(image)
     labels.append(label)
-  return cp.array(images), cp.array(labels)
+  return np.array(images, dtype=np.float32), np.array(labels, dtype=np.float32)
 
 # prepare train data
 mnist_train = mnist_train.cache()
@@ -60,15 +60,11 @@ net.add(FcLayer(64, 10))                    # input_shape=(1, 50)       ;   outp
 net.add(ActivationLayer(tanh, tanh_prime))
 
 net.use(mse, mse_prime)
-net.fit(x_train, y_train, epochs=50, learning_rate=0.01)
+net.fit(x_train, y_train, epochs=10, learning_rate=0.001)
 
 # evaluate the network on the test set
 predictions = net.predict(x_test)
 for i in range(5):
-    print(f"Predicted: {np.argmax(predictions[i])}, True: {np.argmax(y_test[i].get())}")  # Explicitly convert to NumPy array
-# evaluate against y_test
-print("\n")
-#print("predicted values : ")
-#print(out, end="\n")
-#print("true values : ")
-#print(labels[:3], end="\n")
+    print(f"Predicted: {np.argmax(predictions[i])}, True: {np.argmax(y_test[i])}")  # Explicitly convert to NumPy array
+
+
