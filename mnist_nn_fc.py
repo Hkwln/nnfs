@@ -60,11 +60,11 @@ net.add(FcLayer(64, 10))                    # input_shape=(1, 50)       ;   outp
 net.add(ActivationLayer(tanh, tanh_prime))
 
 net.use(mse, mse_prime)
-net.fit(x_train, y_train, epochs=10, learning_rate=0.01)
+net.fit(x_train, y_train, epochs=50, learning_rate=0.01)
 
 # evaluate the network on the test set
 predictions = net.predict(x_test)
-for i in range(5):
+for i in range(10):
     print(f"Predicted: {np.argmax(predictions[i])}, True: {np.argmax(y_test[i])}")  # Explicitly convert to NumPy array
 
 
