@@ -70,3 +70,19 @@ class Network:
             
             print('epoch %d/%d' % (i+1, epochs))
             print(f'Loss: {err}, Accuracy: {accuracy}')
+    def save_weights(self, filename):
+        weights = []
+        for layer in self.layers:
+            if isinstance(layer, FcLayer):
+                weights.append({
+                    'weights': layer.weights.tolist(),
+                    'bias': layer.bias.tolist()
+                })
+        np.save(filename, weights)
+    def load_weights(self, file_path):
+        with open(file_path, 'r') as f:
+            weights = json.load(f)
+        for layer, weight in zip(self.layers, weights):
+            if isinstance(layer, FcLayer):
+                layer.weights = np.array(weight['weights'])
+                layer.bias = np.array(weight['bias'])
