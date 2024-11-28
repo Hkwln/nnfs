@@ -7,9 +7,10 @@ class FcLayer(Layer):
     #output_size = number of output neurons=
     def __init__(self, input_size, output_size, beta1=0.9, beta2 = 0.999, epsilon = 1e-8) -> None:
         super().__init__()
-        
+
         self.weights = np.random.randn(output_size, input_size)
         self.bias = np.random.randn(output_size, 1)
+
         #self.beta1 = beta1
         #self.beta2 = beta2
         #self.epsilon = epsilon
@@ -87,4 +88,3 @@ class FcLayer(Layer):
         return 1.0/(1.0+np.exp(-z))
     def sigmoid_prime(self, z):
         return self.sigmoid(z)*(1-self.sigmoid(z))
-

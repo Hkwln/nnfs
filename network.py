@@ -1,5 +1,4 @@
 import numpy as np
-import json
 from fully_connected_layer import FcLayer
 class Network:
     def __init__(self) -> None:
@@ -79,9 +78,9 @@ class Network:
                     'bias': layer.bias.tolist()
                 })
         np.save(filename, weights)
+
     def load_weights(self, file_path):
-        with open(file_path, 'r') as f:
-            weights = json.load(f)
+        weights = np.load(file_path, allow_pickle=True)
         for layer, weight in zip(self.layers, weights):
             if isinstance(layer, FcLayer):
                 layer.weights = np.array(weight['weights'])
