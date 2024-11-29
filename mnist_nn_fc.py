@@ -63,7 +63,7 @@ net.add(ActivationLayer(tanh, tanh_prime))
 net.load_weights('weights.npy')
 
 net.use(mse, mse_prime)
-net.fit(x_train, y_train, epochs=30, learning_rate=0.01)
+net.fit(x_train, y_train, epochs=6, learning_rate=0.01)
 
 
 # evaluate the network on the test set

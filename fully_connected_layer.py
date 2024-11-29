@@ -18,8 +18,8 @@ class FcLayer(Layer):
     #returns outpot for a given input
     def forward_propagation(self, input_data):
         self.input = input_data
-        if self.input.ndim == 1:
-            self.input = self.input.reshape(-1, 1)
+        #if self.input.ndim == 1:
+        #    self.input = self.input.reshape(-1, 1)
         self.output = np.dot(self.weights, self.input) + self.bias
         return self.output  # Explicitly convert to NumPy array
     #now i am trying to train the network using a mini-batch stochastic gradient descent
