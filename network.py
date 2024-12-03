@@ -1,4 +1,5 @@
 import numpy as np
+
 from fully_connected_layer import FcLayer
 class Network:
     def __init__(self) -> None:
