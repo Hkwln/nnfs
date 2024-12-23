@@ -60,7 +60,9 @@ net.add(ActivationLayer(tanh, tanh_prime))
 net.add(FcLayer(64, 10))                    # input_shape=(1, 50)       ;   output_shape=(1, 10) layer 3
 net.add(ActivationLayer(tanh, tanh_prime))
 
-net.load_weights('weights.npy')
+#load weights if they exist
+if os.path.exists('weights.npy'): 
+  net.load_weights('weights.npy')
 
 net.use(mse, mse_prime)
 net.fit(x_train, y_train, epochs=30, learning_rate=0.01)
@@ -70,8 +72,7 @@ net.fit(x_train, y_train, epochs=30, learning_rate=0.01)
 predictions = net.predict(x_test)
 #save weights
 net.save_weights('weights.npy')
-#load weights
-#net.load_weights('weights.npy')
+
 
 
 
