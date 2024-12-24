@@ -1,5 +1,6 @@
 from baselayerclass import Layer
 import numpy as np
+import os
 
 #inherit from base class Layer
 class FcLayer(Layer):
@@ -7,9 +8,9 @@ class FcLayer(Layer):
     #output_size = number of output neurons=
     def __init__(self, input_size, output_size, beta1=0.9, beta2 = 0.999, epsilon = 1e-8) -> None:
         super().__init__()
-
-        self.weights = np.random.randn(output_size, input_size)
-        self.bias = np.random.randn(output_size, 1)
+        if not os.path.exists('weights.npy'):
+            self.weights = np.random.randn(output_size, input_size)
+            self.bias = np.random.randn(output_size, 1)
 
         #self.beta1 = beta1
         #self.beta2 = beta2

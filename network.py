@@ -27,13 +27,7 @@ class Network:
                 output = layer.forward_propagation(output)
             result.append(output)  # Explicitly convert to NumPy array
         return result
-    def get_weights(self):
-        weights = []
-        for layer in self.layers:
-            if isinstance(layer, FcLayer):
-                weights.append(layer.weights)
-        return weights
-    #train the network 
+    #train the network
     def fit(self, x_train, y_train, epochs, learning_rate):
         # training loop
         for i in range(epochs):
@@ -81,7 +75,10 @@ class Network:
 
     def load_weights(self, file_path):
         weights = np.load(file_path, allow_pickle=True)
-        for layer, weight in zip(self.layers, weights):
+        #assign weights to specific layers
+        layer_indices = [0,2,4] # indices of layers that have weights
+        for index, weight in zip(layer_indices, weights):
+            layer = self.layers[index]
             if isinstance(layer, FcLayer):
                 layer.weights = np.array(weight['weights'])
                 layer.bias = np.array(weight['bias'])
