@@ -57,14 +57,10 @@ net.add(FcLayer(64, 10))                    # layer 3
 net.add(ActivationLayer(tanh, tanh_prime))
 
 net.use(mse, mse_prime)
-<<<<<<< HEAD
-net.fit(x_train, y_train, epochs=6, learning_rate=0.01)
-=======
 #load weights if they exist
 if os.path.exists('weights.npy'):
   net.load_weights('weights.npy')
 net.fit(x_train, y_train, epochs=30, learning_rate=0.01)
->>>>>>> temp-branch
 
 # evaluate the network on the test set
 predictions = net.predict(x_test)
