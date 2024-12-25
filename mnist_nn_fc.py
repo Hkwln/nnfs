@@ -17,7 +17,6 @@ from  loss import mse, mse_prime
                                                    as_supervised=True, shuffle_files=True,
                                                      with_info=True,)
 
-#normalizing img
 def normalize_img(image, label):
   image = np.array(image) / 255.0
   label = np.eye(10)[label]  # One-hot encoding
@@ -47,7 +46,6 @@ mnist_test = mnist_test.cache()
 mnist_test = mnist_test.unbatch()
 x_test, y_test = prepare_data(mnist_test)
 
-
 # Network, diese tolle graphik, die man überall sieht mit den layern und neuronen und so
 net = Network()
 
@@ -58,13 +56,11 @@ net.add(ActivationLayer(tanh, tanh_prime))
 net.add(FcLayer(64, 10))                    # layer 3
 net.add(ActivationLayer(tanh, tanh_prime))
 
-
 net.use(mse, mse_prime)
 #load weights if they exist
 if os.path.exists('weights.npy'):
   net.load_weights('weights.npy')
-net.fit(x_train, y_train, epochs=3, learning_rate=0.01)
-
+net.fit(x_train, y_train, epochs=30, learning_rate=0.01)
 
 # evaluate the network on the test set
 predictions = net.predict(x_test)
@@ -73,5 +69,3 @@ net.save_weights('weights.npy')
 
 for i in range(10):
     print(f"Predicted: {np.argmax(predictions[i])}, True: {np.argmax(y_test[i])}")  # Explicitly convert to NumPy array
-
-
