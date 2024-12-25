@@ -11,3 +11,4 @@ This Network should work and start training as soon as you run mnist_nn_fc.py an
 
 
 This Project can be considered completed
+a book wich might help you: https://www.deeplearningbook.org/
