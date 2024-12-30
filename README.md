@@ -1,6 +1,6 @@
-# nnfs
+#  <h1> nnfs
 
-neural network from scratch
+# <h5> neural network from scratch
 
 
 using tensorflow_dataset just to import the dataset
@@ -21,4 +21,4 @@ This Project can be considered completed
 
 
 
-a book wich might help you: https://www.deeplearningbook.org/
+(a book wich might help you: https://www.deeplearningbook.org/ )
